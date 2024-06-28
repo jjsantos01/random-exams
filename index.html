@@ -22,6 +22,16 @@
 <body>
   <input type="file" id="fileInput" accept=".xlsx" />
   <button onclick="cargarPreguntas()">Cargar Preguntas</button>
+
+  <br>
+  <label for="numPreguntas">Número de preguntas en los exámenes:</label>
+  <input type="number" id="numPreguntas" min="1" max="50" step="1" value="5">
+
+  <br>
+  <textarea id="estudiantesInput" rows="4" cols="50" placeholder="Estudiante 1&#10;Estudiante 2">Estudiante 1
+Estudiante 2</textarea>
+
+  <br>
   <button onclick="generarExamenesYRespuestas()">Generar Exámenes y Respuestas</button>
 
   <div id="tablaPreguntas"></div>
@@ -53,7 +63,6 @@
           }
 
           crearTablaPreguntas();
-          alert('Preguntas cargadas correctamente.');
         };
         reader.readAsArrayBuffer(file);
       } else {
@@ -117,85 +126,88 @@
 
     async function generarExamenesYRespuestas() {
       if (Object.keys(preguntasRespuestas).length === 0) {
-      alert('Por favor, cargue un archivo Excel con las preguntas antes de generar los exámenes.');
-      return;
+        alert('Por favor, cargue un archivo Excel con las preguntas antes de generar los exámenes.');
+        return;
       }
 
       let numEstudiantes = 5; // Puedes ajustar esto o pedir al usuario que lo ingrese
       let numPreguntas = 10; // Puedes ajustar esto o pedir al usuario que lo ingrese
 
-      // Prompt the user to enter the number of questions
-      const userInput = prompt('Ingrese el número de preguntas a incluir en el examen:');
+      // Get the number of questions
+      const userInput = document.getElementById('numPreguntas').value;
       if (userInput) {
-      numPreguntas = parseInt(userInput);
+        numPreguntas = parseInt(userInput);
       }
 
       const { jsPDF } = window.jspdf;
       const pdfExamenes = new jsPDF();
       const pdfRespuestas = new jsPDF();
 
-      for (let estudiante = 1; estudiante <= numEstudiantes; estudiante++) {
-      const preguntas = Object.entries(preguntasRespuestas).sort(() => Math.random() - 0.5).slice(0, numPreguntas);
-      let yExamen = 10;
-      let yRespuestas = 10;
+      const estudiantesInput = document.getElementById('estudiantesInput');
+      const estudiantes = estudiantesInput.value.split('\n').filter(estudiante => estudiante.trim() !== '');
 
-      pdfExamenes.setFontSize(16);
-      pdfExamenes.text(`Examen para Estudiante ${estudiante}:`, 10, yExamen);
-      yExamen += 10;
+      for (let estudiante = 0; estudiante < estudiantes.length; estudiante++) {
+        const preguntas = Object.entries(preguntasRespuestas).sort(() => Math.random() - 0.5).slice(0, numPreguntas);
+        let yExamen = 10;
+        let yRespuestas = 10;
 
-      pdfRespuestas.setFontSize(16);
-      pdfRespuestas.text(`Hoja de Respuestas - Examen ${estudiante}`, 10, yRespuestas);
-      yRespuestas += 10;
+        pdfExamenes.setFontSize(16);
+        pdfExamenes.text(`Examen para Estudiante ${estudiantes[estudiante]}:`, 10, yExamen);
+        yExamen += 10;
 
-      const opcionesRespuesta = ['A', 'B', 'C', 'D'];
+        pdfRespuestas.setFontSize(16);
+        pdfRespuestas.text(`Hoja de Respuestas - Examen ${estudiantes[estudiante]}`, 10, yRespuestas);
+        yRespuestas += 10;
 
-      for (let i = 0; i < preguntas.length; i++) {
-        const [numPregunta, pregunta] = preguntas[i];
-        const opciones = pregunta.opciones.slice();
-        const respuestaCorrecta = opciones[0];
-        opciones.sort(() => Math.random() - 0.5);
+        const opcionesRespuesta = ['A', 'B', 'C', 'D'];
 
-        pdfExamenes.setFontSize(12);
-        const preguntaDividida = pdfExamenes.splitTextToSize(`${i + 1}. ${pregunta.pregunta}`, 180);
-        pdfExamenes.text(preguntaDividida, 10, yExamen);
-        yExamen += preguntaDividida.length * 7;
+        for (let i = 0; i < preguntas.length; i++) {
+          const [numPregunta, pregunta] = preguntas[i];
+          const opciones = pregunta.opciones.slice();
+          const respuestaCorrecta = opciones[0];
+          opciones.sort(() => Math.random() - 0.5);
 
-        for (let j = 0; j < opciones.length; j++) {
-        const opcionDividida = pdfExamenes.splitTextToSize(`    ${String.fromCharCode(65 + j)}) ${opciones[j]}`, 180);
-        pdfExamenes.text(opcionDividida, 10, yExamen);
-        yExamen += opcionDividida.length * 7;
+          pdfExamenes.setFontSize(12);
+          const preguntaDividida = pdfExamenes.splitTextToSize(`${i + 1}. ${pregunta.pregunta}`, 180);
+          pdfExamenes.text(preguntaDividida, 10, yExamen);
+          yExamen += preguntaDividida.length * 7;
+
+          for (let j = 0; j < opciones.length; j++) {
+            const opcionDividida = pdfExamenes.splitTextToSize(`    ${String.fromCharCode(65 + j)}) ${opciones[j]}`, 180);
+            pdfExamenes.text(opcionDividida, 10, yExamen);
+            yExamen += opcionDividida.length * 7;
+          }
+          yExamen += 5;
+
+          const opcionesCanvas = await Promise.all(opcionesRespuesta.map(async (letra, index) => {
+            const sombreado = opciones[index] === respuestaCorrecta;
+            return crearOpcionCirculo(letra, sombreado);
+          }));
+
+          pdfRespuestas.setFontSize(12);
+          pdfRespuestas.text(`${i + 1}`, 10, yRespuestas - 5);
+
+          for (let k = 0; k < opcionesCanvas.length; k++) {
+            const imgData = opcionesCanvas[k].toDataURL('image/png');
+            pdfRespuestas.addImage(imgData, 'PNG', 20 + (k * 20), yRespuestas - 12, 10, 10);
+          }
+
+          yRespuestas += 20;
+
+          if (yExamen > 270) {
+            pdfExamenes.addPage();
+            yExamen = 10;
+          }
+          if (yRespuestas > 270) {
+            pdfRespuestas.addPage();
+            yRespuestas = 10;
+          }
         }
-        yExamen += 5;
 
-        const opcionesCanvas = await Promise.all(opcionesRespuesta.map(async (letra, index) => {
-        const sombreado = opciones[index] === respuestaCorrecta;
-        return crearOpcionCirculo(letra, sombreado);
-        }));
-
-        pdfRespuestas.setFontSize(12);
-        pdfRespuestas.text(`${i + 1}`, 10, yRespuestas - 5);
-
-        for (let k = 0; k < opcionesCanvas.length; k++) {
-        const imgData = opcionesCanvas[k].toDataURL('image/png');
-        pdfRespuestas.addImage(imgData, 'PNG', 20 + (k * 20), yRespuestas - 12, 10, 10);
+        if (estudiante < estudiantes.length - 1) {
+          pdfExamenes.addPage();
+          pdfRespuestas.addPage();
         }
-
-        yRespuestas += 20;
-
-        if (yExamen > 270) {
-        pdfExamenes.addPage();
-        yExamen = 10;
-        }
-        if (yRespuestas > 270) {
-        pdfRespuestas.addPage();
-        yRespuestas = 10;
-        }
-      }
-
-      if (estudiante < numEstudiantes) {
-        pdfExamenes.addPage();
-        pdfRespuestas.addPage();
-      }
       }
 
       pdfExamenes.save('examenes.pdf');
@@ -204,4 +216,3 @@
   </script>
 </body>
 </html>
-<!-- TODO: cargar lista de estudiantes, como text area -->
