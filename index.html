@@ -20,8 +20,7 @@
   </style>
 </head>
 <body>
-  <input type="file" id="fileInput" accept=".xlsx" />
-  <button onclick="cargarPreguntas()">Cargar Preguntas</button>
+  <input type="file" id="fileInput" accept=".xlsx" onchange="cargarPreguntas()"/>
 
   <br>
   <label for="numPreguntas">Número de preguntas en los exámenes:</label>
@@ -144,6 +143,7 @@ Estudiante 2</textarea>
       const { jsPDF } = window.jspdf;
       const pdfExamenes = new jsPDF();
       const pdfRespuestas = new jsPDF();
+      const pdfHojaRespuestas = new jsPDF();
 
       const estudiantesInput = document.getElementById('estudiantesInput');
       const estudiantes = estudiantesInput.value.split('\n').filter(estudiante => estudiante.trim() !== '');
@@ -152,6 +152,7 @@ Estudiante 2</textarea>
         const preguntas = Object.entries(preguntasRespuestas).sort(() => Math.random() - 0.5).slice(0, numPreguntas);
         let yExamen = 10;
         let yRespuestas = 10;
+        let yHojaRespuestas = 10;
 
         pdfExamenes.setFontSize(16);
         pdfExamenes.text(`Examen para Estudiante ${estudiantes[estudiante]}:`, 10, yExamen);
@@ -159,7 +160,11 @@ Estudiante 2</textarea>
 
         pdfRespuestas.setFontSize(16);
         pdfRespuestas.text(`Hoja de Respuestas - Examen ${estudiantes[estudiante]}`, 10, yRespuestas);
-        yRespuestas += 10;
+        yRespuestas += 15;
+
+        pdfHojaRespuestas.setFontSize(16);
+        pdfHojaRespuestas.text(`Hoja de Respuestas - Examen ${estudiantes[estudiante]}`, 10, yHojaRespuestas);
+        yHojaRespuestas += 15;
 
         const opcionesRespuesta = ['A', 'B', 'C', 'D'];
 
@@ -186,15 +191,25 @@ Estudiante 2</textarea>
             return crearOpcionCirculo(letra, sombreado);
           }));
 
+          const opcionesCanvasHoja = await Promise.all(opcionesRespuesta.map(async (letra, index) => {
+            return crearOpcionCirculo(letra, false);
+          }));
+
           pdfRespuestas.setFontSize(12);
           pdfRespuestas.text(`${i + 1}`, 10, yRespuestas - 5);
+
+          pdfHojaRespuestas.setFontSize(12);
+          pdfHojaRespuestas.text(`${i + 1}`, 10, yHojaRespuestas - 5);
 
           for (let k = 0; k < opcionesCanvas.length; k++) {
             const imgData = opcionesCanvas[k].toDataURL('image/png');
             pdfRespuestas.addImage(imgData, 'PNG', 20 + (k * 20), yRespuestas - 12, 10, 10);
+            const imgDataHoja = opcionesCanvasHoja[k].toDataURL('image/png');
+            pdfHojaRespuestas.addImage(imgDataHoja, 'PNG', 20 + (k * 20), yHojaRespuestas - 12, 10, 10);
           }
 
           yRespuestas += 20;
+          yHojaRespuestas += 20;
 
           if (yExamen > 270) {
             pdfExamenes.addPage();
@@ -204,16 +219,22 @@ Estudiante 2</textarea>
             pdfRespuestas.addPage();
             yRespuestas = 10;
           }
+          if (yHojaRespuestas > 270) {
+            pdfHojaRespuestas.addPage();
+            yHojaRespuestas = 10;
+          }
         }
 
         if (estudiante < estudiantes.length - 1) {
           pdfExamenes.addPage();
           pdfRespuestas.addPage();
+          pdfHojaRespuestas.addPage();
         }
       }
 
       pdfExamenes.save('examenes.pdf');
       pdfRespuestas.save('respuestas.pdf');
+      pdfHojaRespuestas.save('hoja_respuestas.pdf');
     }
   </script>
 </body>
