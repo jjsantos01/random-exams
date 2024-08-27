@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generar Exámenes PDF</title>
+  <title>Generador de exámenes aleatorios</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
@@ -11,21 +11,24 @@
   <script src="script.js"></script>
 </head>
 <body>
-  <input type="file" id="fileInput" accept=".xlsx" onchange="cargarPreguntas()"/>
+  <h1>Generador de Exámenes Aleatorios</h1>
+  <div class="file-upload">
+    <label for="fileInput">Seleccionar archivo Excel</label>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="cargarPreguntas()">
+  </div>
 
-  <br>
-  <label for="numPreguntas">Número de preguntas en los exámenes:</label>
-  <input type="number" id="numPreguntas" min="1" max="50" step="1" value="5">
+    <div>
+      <label for="numPreguntas">Número de preguntas en los exámenes:</label>
+      <input type="number" id="numPreguntas" min="1" max="50" step="1" value="5">
+    </div>
 
-  <br>
-  <label for="estudiantesInput">Nombre de los estudiantes:</label>
-  <br>
-  <textarea id="estudiantesInput" rows="4" cols="50" placeholder="Estudiante 1&#10;Estudiante 2">Estudiante 1
-Estudiante 2</textarea>
+    <div>
+      <label for="estudiantesInput">Nombre de los estudiantes:</label>
+      <textarea id="estudiantesInput" rows="4" cols="50"
+      placeholder="Estudiante 1&#10;Estudiante 2&#10;...&#10;Estudiante N" required></textarea>
+    </div>
 
-  <br>
-  <button onclick="generarExamenesYRespuestas()">Generar Exámenes y Respuestas</button>
-
+    <button onclick="generarExamenesYRespuestas()">Generar Exámenes y Respuestas</button>
   <div id="tablaPreguntas"></div>
 
 </body>

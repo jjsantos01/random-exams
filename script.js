@@ -115,7 +115,7 @@ async function generarExamenesYRespuestas() {
     let yHojaRespuestas = 10;
 
     pdfExamenes.setFontSize(16);
-    pdfExamenes.text(`Examen para Estudiante ${estudiantes[estudiante]}:`, 10, yExamen);
+    pdfExamenes.text(`Nombre: ${estudiantes[estudiante]}`, 10, yExamen);
     yExamen += 10;
 
     pdfRespuestas.setFontSize(16);
