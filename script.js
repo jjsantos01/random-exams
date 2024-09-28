@@ -194,5 +194,26 @@ async function generarExamenesYRespuestas() {
 
   pdfExamenes.save('examenes.pdf');
   pdfRespuestas.save('respuestas.pdf');
-  pdfHojaRespuestas.save('hoja_respuestas.pdf');
+  pdfHojaRespuestas.save('hoja_evaluacion.pdf');
 }
+
+function setupCollapsibleSections() {
+  const collapsibles = document.querySelectorAll('.collapsible-header');
+
+  collapsibles.forEach(header => {
+      header.addEventListener('click', function() {
+          this.classList.toggle('active');
+          const content = this.nextElementSibling;
+
+          if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+          } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+          }
+      });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setupCollapsibleSections();
+} );

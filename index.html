@@ -12,6 +12,40 @@
 </head>
 <body>
   <h1>Generador de Exámenes Aleatorios</h1>
+  <div id="description">
+    ¿Eres un docente y haces exámenes para tus estudiantes, pero te gustaría que cada uno tenga preguntas diferentes para evitar la copia?
+    Esta página te ayudará a generar exámenes aleatorios a partir de un banco de preguntas guardado en un archivo de Excel.
+    Los <a href="example/examenes.pdf" target="_blank">exámenes generados</a>, en formato PDF, tendrán las preguntas en orden aleatorio y las respuestas en orden diferente.
+    Para facilitar la calificación, se generarán un formato de <a href="example/hoja_evaluacion.pdf" target="_blank">hoja de evaluación</a> y una <a href="example/respuestas.pdf" target="_blank">hoja con respuestas</a> única para cada alumno.
+  </div>
+  <h3 class="collapsible-header">Instrucciones</h3>
+  <div id="instruction" class="collapsible-content">
+    <ol>
+      <li>Crea un banco de preguntas usando Excel, con las preguntas y respuestas con el siguiente formato:
+        <ul>
+          <li>Las preguntas deben estar en la primera columna.</li>
+          <li>Las opciones respuestas deben estar en las siguientes columnas "opción 1", "opción 2", "opción 3" y "opción 4". Por el momento deben ser exactamente 4 opciones</li>
+          <li>La respuesta correcta debe estar en la primera opción.
+             Al momento de generar los exámenes, el orden de respuestas cambiará,
+             pero tendrás la hoja de respuesta para saber cuál es la correcta en cada examen</li>
+        </ul>
+        Por ejemplo:
+        <pre>
+          | Pregunta 1 | opción 1 (respuesta) | opción 2 | opción 3 | opción 4 |
+          |------------|----------------------|----------|----------|----------|
+          | Pregunta 2 | opción 1 (respuesta) | opción 2 | opción 3 | opción 4 |
+          |------------|----------------------|----------|----------|----------|
+          | Pregunta 3 | opción 1 (respuesta) | opción 2 | opción 3 | opción 4 |
+        </pre>
+        Revisa el archivo de ejemplo <a href="example/preguntas_respuestas.xlsx" download>aquí</a>.
+      </li>
+      <li>Ingresa el número de preguntas que deseas en los exámenes.</li>
+      <li>Ingresa los nombres de los estudiantes.</li>
+      <li>Presiona el botón "Generar Exámenes y Respuestas".</li>
+      <li>Descarga los exámenes y las hojas de respuestas.</li>
+    </ol>
+  </div>
+
   <div class="file-upload">
     <label for="fileInput">Seleccionar archivo Excel</label>
     <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="cargarPreguntas()">
@@ -30,6 +64,14 @@
 
     <button onclick="generarExamenesYRespuestas()">Generar Exámenes y Respuestas</button>
   <div id="tablaPreguntas"></div>
+
+  <footer>
+    <p>
+      Creado por <a href="https://twitter.com/jjsantoso" target="_blank">@jjsantoso</a>
+      - <a href="https://github.com/jjsantos01" target="_blank">GitHub</a>
+      - <a href="https://www.jjsantoso.com/" target="_blank">Web</a>
+    </p>
+  </footer>
 
 </body>
 </html>
