@@ -1,20 +1,32 @@
-# Description
+# Generador de exámenes aleatorios
 
-This project is a public website available at <https://jjsantos01.github.io/random-exams> that allows to generate random exams for students. The user needs
-to load an Excel file containing questions and posible options, and the program will generate 3 PDF files:
+¿Eres un docente y haces exámenes para tus estudiantes, pero te gustaría que cada uno tenga preguntas diferentes para evitar la copia?
+Esta página te ayudará a generar exámenes aleatorios a partir de un banco de preguntas guardado en un archivo de Excel.
+Los [exámenes generados](example/examenes.pdf), en formato PDF, tendrán las preguntas en orden aleatorio y las respuestas en orden diferente.
+Para facilitar la calificación, se generarán un formato de [hoja de evaluación](example/hoja_evaluacion.pdf) y una [hoja con respuestas](example/respuestas.pdf) única para cada alumno.
 
-1. A PDF file with the exams for each student with the questions in random order.
-2. A PDF file with the bubble sheet for student to mark their answer.
-3. A PDF with the correct answers to ease the evaluation process.
+## Instrucciones
 
-You need to provide an Excel file with the following structure:
+1. Crea un banco de preguntas usando Excel, con las preguntas y respuestas con el siguiente formato:
 
-| Question 1 | option 1 (answer) | option 2 | option 3 | option 4 |
-|------------|------------------|----------|----------|----------|
-| Question 2 | option 1 (answer) | option 2 | option 3 | option 4 |
-| Question 3 | option 1 (answer) | option 2 | option 3 | option 4 |
-...
+- Las preguntas deben estar en la primera columna.
+- Las opciones respuestas deben estar en las siguientes columnas "opción 1", "opción 2", "opción 3" y "opción 4". Por el momento deben ser exactamente 4 opciones.
+- La respuesta correcta debe estar en la primera opción. Al momento de generar los exámenes, el orden de respuestas cambiará, pero tendrás la hoja de respuesta para saber cuál es la correcta en cada examen.
 
-The first column contains the questions, and the other columns contain the options. The correct answer should be always the first option.
+  Por ejemplo:
 
-In the [example](/example/) folder you can find an example of the Excel file that you need to provide and the generated PDF files.
+  | Pregunta 1 | opción 1 (respuesta) | opción 2 | opción 3 | opción 4 |
+  |------------|----------------------|----------|----------|----------|
+  | Pregunta 2 | opción 1 (respuesta) | opción 2 | opción 3 | opción 4 |
+  | Pregunta 3 | opción 1 (respuesta) | opción 2 | opción 3 | opción 4 |
+
+    Revisa el archivo de ejemplo [aquí](example/preguntas_respuestas.xlsx).
+
+2. Ingresa el número de preguntas que deseas en los exámenes.
+3. Ingresa los nombres de los estudiantes.
+4. Presiona el botón "Generar Exámenes y Respuestas".
+5. Descarga los exámenes, formato de evaluación y la hoja de respuestas. Si lo solicita tu navegador, da permiso a la página de descargar varios archivos.
+
+## Sitio renderizado
+
+![Random Exams Screenshot](images/random-exams.png)
