@@ -1,7 +1,8 @@
 # Description
 
-This project is a public website available at https://jjsantos01.github.io/random-exams that allows to generate random exams for students. The user needs
+This project is a public website available at <https://jjsantos01.github.io/random-exams> that allows to generate random exams for students. The user needs
 to load an Excel file containing questions and posible options, and the program will generate 3 PDF files:
+
 1. A PDF file with the exams for each student with the questions in random order.
 2. A PDF file with the bubble sheet for student to mark their answer.
 3. A PDF with the correct answers to ease the evaluation process.
