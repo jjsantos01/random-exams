@@ -126,7 +126,7 @@ async function generarExamenesYRespuestas(e) {
     yRespuestas += 15;
 
     pdfHojaRespuestas.setFontSize(16);
-    pdfHojaRespuestas.text(`Hoja de Respuestas - Examen ${estudiantes[estudiante]}`, 10, yHojaRespuestas);
+    pdfHojaRespuestas.text(`Hoja de Evaluación - Examen ${estudiantes[estudiante]}`, 10, yHojaRespuestas);
     yHojaRespuestas += 15;
 
     const opcionesRespuesta = ['A', 'B', 'C', 'D'];
@@ -195,9 +195,41 @@ async function generarExamenesYRespuestas(e) {
     }
   }
 
-  pdfExamenes.save('examenes.pdf');
-  pdfRespuestas.save('respuestas.pdf');
-  pdfHojaRespuestas.save('hoja_evaluacion.pdf');
+  pdfExamenes.setProperties({ title: 'Exámenes' })
+  pdfRespuestas.setProperties({ title: 'Respuestas' })
+  pdfHojaRespuestas.setProperties({ title: 'Hoja de evaluación' })
+
+  const pdfExamenesBlob = pdfExamenes.output('blob');
+  const pdfRespuestasBlob = pdfRespuestas.output('blob');
+  const pdfHojaRespuestasBlob = pdfHojaRespuestas.output('blob');
+
+  const examenesUrl = URL.createObjectURL(pdfExamenesBlob);
+  const respuestasUrl = URL.createObjectURL(pdfRespuestasBlob);
+  const hojaRespuestasUrl = URL.createObjectURL(pdfHojaRespuestasBlob);
+
+  const examenesIframe = document.createElement('iframe');
+  examenesIframe.src = examenesUrl;
+  examenesIframe.width = '100%';
+  examenesIframe.height = '500px';
+  examenesIframe.title = 'Examenes';
+
+  const respuestasIframe = document.createElement('iframe');
+  respuestasIframe.src = respuestasUrl;
+  respuestasIframe.width = '100%';
+  respuestasIframe.height = '500px';
+  respuestasIframe.title = 'Respuestas';
+
+  const hojaRespuestasIframe = document.createElement('iframe');
+  hojaRespuestasIframe.src = hojaRespuestasUrl;
+  hojaRespuestasIframe.width = '100%';
+  hojaRespuestasIframe.height = '500px';
+  hojaRespuestasIframe.title = 'Hoja de Respuestas';
+
+  const pdfContainer = document.getElementById('pdfContainer');
+  pdfContainer.innerHTML = '';
+  pdfContainer.appendChild(examenesIframe);
+  pdfContainer.appendChild(respuestasIframe);
+  pdfContainer.appendChild(hojaRespuestasIframe);
 }
 
 function setupCollapsibleSections() {
