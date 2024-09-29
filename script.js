@@ -24,6 +24,8 @@ function cargarPreguntas() {
       }
 
       crearTablaPreguntas();
+      const labelInput = document.getElementById('fileInputLabel');
+      labelInput.textContent = file.name;
     };
     reader.readAsArrayBuffer(file);
   } else {
@@ -217,6 +219,8 @@ function setupCollapsibleSections() {
 
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('preguntasForm');
+  const fileInput = document.getElementById('fileInput');
   form.addEventListener('submit', generarExamenesYRespuestas);
+  fileInput.addEventListener('change', cargarPreguntas);
   setupCollapsibleSections();
 } );
