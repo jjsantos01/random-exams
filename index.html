@@ -42,7 +42,7 @@
       <li>Ingresa el número de preguntas que deseas en los exámenes.</li>
       <li>Ingresa los nombres de los estudiantes.</li>
       <li>Presiona el botón "Generar Exámenes y Respuestas".</li>
-      <li>Descarga los exámenes y las hojas de respuestas.</li>
+      <li>Descarga los exámenes, formato de evaluación y la hoja de respuestas. Si lo solicita tu navegador, da permiso a la página de descargar varios archivos.</li>
     </ol>
   </div>
 
@@ -51,6 +51,7 @@
     <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="cargarPreguntas()">
   </div>
 
+  <form id="preguntasForm">
     <div>
       <label for="numPreguntas">Número de preguntas en los exámenes:</label>
       <input type="number" id="numPreguntas" min="1" max="50" step="1" value="5">
@@ -62,7 +63,8 @@
       placeholder="Estudiante 1&#10;Estudiante 2&#10;...&#10;Estudiante N" required></textarea>
     </div>
 
-    <button onclick="generarExamenesYRespuestas()">Generar Exámenes y Respuestas</button>
+    <input type="submit" value="Generar Exámenes y Respuestas">
+  </form>
   <div id="tablaPreguntas"></div>
 
   <footer>

@@ -85,7 +85,8 @@ async function crearOpcionCirculo(opcion, sombreado) {
   return canvas;
 }
 
-async function generarExamenesYRespuestas() {
+async function generarExamenesYRespuestas(e) {
+  e.preventDefault();
   if (Object.keys(preguntasRespuestas).length === 0) {
     alert('Por favor, cargue un archivo Excel con las preguntas antes de generar los exámenes.');
     return;
@@ -215,5 +216,7 @@ function setupCollapsibleSections() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('preguntasForm');
+  form.addEventListener('submit', generarExamenesYRespuestas);
   setupCollapsibleSections();
 } );

@@ -40,7 +40,7 @@ h1 {
 }
 
 /* Estilos para botones */
-button {
+input[type="submit"] {
   background-color: #3498db;
   color: white;
   border: none;
@@ -51,7 +51,7 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+input[type="submit"]:hover {
   background-color: #2980b9;
 }
 
