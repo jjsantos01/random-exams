@@ -1,4 +1,4 @@
-# Generador de exámenes aleatorios
+# Generador de exámenes en orden aleatorio
 
 ¿Eres un docente y haces exámenes para tus estudiantes, pero te gustaría que cada uno tenga preguntas diferentes para evitar la copia?
 Esta página te ayudará a generar exámenes aleatorios a partir de un banco de preguntas guardado en un archivo de Excel.
